@@ -10,13 +10,15 @@
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
 </head>
 
 <body id="body">
     <header>
         <!-- place navbar here -->
     </header>
-    <main>
+    <main class=" d-flex justify-content-center align-items-center flex-column my-5">
         <h1>welcome {{ session('user') }}</h1>
         <a href="{{ route('logout') }}" class="mx-4"><button type="button" class="btn btn-danger">logout</button></a>
         <p class="my-4">this page will be autometically logout after one minute without any activity</p>
