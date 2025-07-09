@@ -28,7 +28,7 @@ Route::middleware('web')->group(function () {
 
 Route::get('/webpage', function () {
     return view('webpage');
-})->name('webpage')->middleware('verified', sessionCheck::class);
+})->name('webpage')->middleware('verified');
 
 
 route::get('logout', [userController::class, 'logout'])->name('logout');
