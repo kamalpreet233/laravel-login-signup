@@ -18,7 +18,7 @@
         />
     </head>
 
-    <body>
+    <body id="body"> 
         <header>
             <!-- place navbar here -->
         </header>
@@ -42,5 +42,14 @@
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous"
         ></script>
+        {{-- <script>
+        var timeout = 5000;
+        document.getElementById('body').addEventListener('hover',()=>{
+            timeout = 5000;
+        })
+        setTimeout(() => {
+                window.location.href = 'http://127.0.0.1:8000/logout';
+            }, timeout);
+         </script> --}}
     </body>
 </html>
