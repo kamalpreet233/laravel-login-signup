@@ -42,7 +42,7 @@
                 <p class="error">{{ session('error') }}</p>
             @endif
             @if (session('status'))
-                <p class="error">{{session('status')}}</p>
+                <p class="success">{{session('status')}}</p>
             @endif
             <p class="my-4"><a href="{{ route('password.request') }}">forget password</a></p>
             <p class="my-4">new user? <a href="{{ route('register') }}">register</a></p>

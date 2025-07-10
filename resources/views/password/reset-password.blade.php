@@ -18,10 +18,10 @@
         <form action="{{ route('password.update') }}" class="col-6" method="post">
             @csrf
             @method('POST')
-            <div class="form-group col-md-8 my-4">
+            {{-- <div class="form-group col-md-8 my-4">
                 <label for="email">email</label>
                 <input type="email" class="form-control" name="email" id="email" placeholder="email">
-            </div>
+            </div> --}}
             <div class="form-group col-md-8 my-4">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="Password">
@@ -35,6 +35,8 @@
                 <div class="error">{{ $message }}</div>
             @enderror
             <input type="hidden" name="token" value="{{ $token }}">
+            <input type="hidden" name="email" value="{{ $email }}">
+
          
 
             <button type="submit" class="btn btn-primary my-4">Reset password</button>

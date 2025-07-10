@@ -6,7 +6,7 @@ use App\Http\Controllers\userController;
 // use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\SessionCheck;
 use Illuminate\Http\Request;
-
+use App\Models\User;
 
 
 
@@ -79,8 +79,8 @@ Route::post('/forgot-password', [userController::class, 'passwordLinkSent'])->mi
 
 
 
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('password.reset-password', ['token' => $token]);
+Route::get('/reset-password/{token}', function (string $token,Request $request) {
+    return view('password.reset-password', ['token' => $token,'email'=>$request->query('email')]);
 })->middleware('guest')->name('password.reset');
 
 
