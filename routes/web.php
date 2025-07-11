@@ -12,6 +12,7 @@ use App\Models\User;
 
 
 
+
 Route::get('/', function () {
     return view('login');
 });
@@ -28,9 +29,13 @@ Route::middleware('web')->group(function () {
 
 Route::get('/webpage', function () {
     return view('webpage');
-})->name('webpage')->middleware('verified');
+})->name('webpage');
 
+Route::get('/admin',[userController::class,'show'])->middleware('is_admin')->name('admin');
+Route::get('/fetch-users',[userController::class]);
+Route::put('/update/role',[userController::class,'updateRole'])->name('updaterole');
 
+// ->middleware('verified')
 route::get('logout', [userController::class, 'logout'])->name('logout');
 
 

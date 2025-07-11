@@ -10,6 +10,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use function PHPUnit\Framework\returnArgument;
 
 
 
@@ -24,15 +25,27 @@ class userController extends Controller
             'password' => 'required|confirmed|min:6',
 
         ]);
-        $user = User::create($request->all());
-        event(new Registered($user));
+        $count = User::count();
+        $boolean = $count === 0 ? true : false;
+        $value = $count === 0 ? 'admin' : 'client';
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role' => $value,
+            'is_admin' => $boolean,
+        ]);
+        // event(new Registered($user));
         Auth::login($user);
         $user = Auth::user();
         $user = $user->name;
         session(['user' => $user]);
+
+
+
         return redirect()->route('webpage');
-        // return redirect()->route('login-view');
-        // return redirect()->route('verification.send');
+
     }
 
     public function login(Request $request)
@@ -48,7 +61,7 @@ class userController extends Controller
             $user = $user->name;
             session(['user' => $user]);
             // $maxIdleTime = config('session.lifetime') * 60;
-            return redirect()->route('webpage');
+            return redirect()->route('admin');
         } else {
             return redirect()->back()->with('error', 'user not found');
         }
@@ -72,29 +85,53 @@ class userController extends Controller
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
     }
-    public function passwordReset(Request $request){
+    public function passwordReset(Request $request)
+    {
         $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:6|confirmed',
-    ]);
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:6|confirmed',
+        ]);
 
-    $status = Password::reset(
-        $request->only( 'email','password', 'password_confirmation', 'token'),
-        function (User $user, string $password) {
-            $user->forceFill([
-                'password' => Hash::make($password)
-            ])->setRememberToken(Str::random(60));
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
 
-            $user->save();
+                $user->save();
 
-            event(new PasswordReset($user));
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PasswordReset
+            ? redirect()->route('login-view')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    public function show(Request $request)
+    {
+        $posts = User::where('is_admin', '=', false)->get();
+        $admin = User::where('is_admin', '=', true)->first();
+
+        return view('admin.admin', compact('posts'), compact('admin'));
+    }
+    public function updaterole(Request $request)
+    {
+        $posts = User::where('is_admin', '=', false)->get();
+        foreach ($posts as $index => $post) {
+            $updated = $post->update([
+                'role' => $request->role[$post->id],
+            ]);
         }
-    );
+        if ($updated) {
+            return redirect()->route('admin')->with('success', 'changes updated successfully');
+        } else {
+            return redirect()->route('admin')->with('error', 'changes not updated');
+        }
 
-    return $status === Password::PasswordReset
-        ? redirect()->route('login-view')->with('status', __($status))
-        : back()->withErrors(['email' => [__($status)]]);
     }
 
 }
