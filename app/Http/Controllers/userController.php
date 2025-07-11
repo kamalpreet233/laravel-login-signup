@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\is_admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
@@ -26,23 +27,23 @@ class userController extends Controller
 
         ]);
         $count = User::count();
-        $boolean = $count === 0 ? true : false;
-        $value = $count === 0 ? 'admin' : 'client';
+        $is_admin = $count === 0 ? true : false;
+        $role = $count === 0 ? 'admin' : 'client';
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
-            'role' => $value,
-            'is_admin' => $boolean,
+            'role' => $role,
+            'is_admin' => $is_admin,
         ]);
-        // event(new Registered($user));
+        event(new Registered($user));
+
         Auth::login($user);
         $user = Auth::user();
         $user = $user->name;
         session(['user' => $user]);
-
-
+        // $maxIdleTime = config('session.lifetime') * 60;
 
         return redirect()->route('webpage');
 
