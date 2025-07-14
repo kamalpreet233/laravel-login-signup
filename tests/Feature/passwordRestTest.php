@@ -66,7 +66,5 @@ test('password can not be reset if confirm password and password does not match'
     $token = Password::createToken(User::first());
     $response = $this->post('/reset-password',['email'=>'test@gmail.com','password'=>'secret','password_confirmation'=>'secrett','token'=>$token]);
     $response->assertRedirectBack();
-
-
 });
 
