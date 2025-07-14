@@ -44,8 +44,7 @@
                                     <div class="col-4">
                                         @csrf
                                         @method('PUT')
-                                        <select name="role[{{ $post->id }}]" id="select"
-                                            class="select form-select">
+                                        <select name="role[{{ $post->id }}]" id="select" class="select form-select">
                                             <option value="admin">admin</option>
                                             <option value="client">client</option>
                                         </select>
@@ -86,8 +85,6 @@
         let selects = document.querySelectorAll('.select');
         selects.forEach((select, index) => {
             select.value = selectedoptions[index];
-
-
         });
     </script>
 </body>

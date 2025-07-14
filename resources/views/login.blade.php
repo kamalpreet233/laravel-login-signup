@@ -33,6 +33,10 @@
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="Password">
             </div>
+              <div class="form-group col-md-8 my-4">
+                  <input type="checkbox" class="form-check-input" name="remember" id="remember">
+                  <label for="remember">remember me</label>
+            </div>
             @error('password')
                 <div class="error">{{ $message }}</div>
             @enderror

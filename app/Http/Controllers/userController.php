@@ -21,9 +21,10 @@ class userController extends Controller
     public function signup(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:6',
+            'name' => 'required|string|regex:/^[\pL\s]+$/u|max:20|min:2',
+            'email' => 'required|email:rfc,dns,filter',
+            'password' => 'required|min:6|confirmed',
+           
 
         ]);
         $count = User::count();
@@ -52,12 +53,13 @@ class userController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email:rfc,dns,filter',
             'password' => 'required|min:6',
-
         ]);
         $userdata = $request->only('email', 'password');
-        if (Auth::attempt($userdata)) {
+        $remember = $request->has('remember');
+        // print_r($remember);
+        if (Auth::attempt($userdata,$remember) ){
             $user = Auth::user();
             $user = $user->name;
             session(['user' => $user]);
